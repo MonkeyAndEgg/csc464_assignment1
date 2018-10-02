@@ -50,35 +50,30 @@ class Producer implements Runnable {
     } 
       
     public void run() { 
-        for(int i=0; i < 5; i++)   
-            q.put(i); 
+        // for (int i=0; i < 5; i++)   
+        //     q.put(i); 
     } 
 } 
   
 class Consumer implements Runnable { 
     Q q; 
-    Consumer(Q q){ 
+    Consumer(Q q) { 
         this.q = q; 
         new Thread(this, "Consumer").start(); 
     } 
       
-    public void run() 
-    { 
-        for(int i=0; i < 5; i++)  
+    public void run() { 
+        for (int i=0; i < 1; i++)  
             q.get(); 
     } 
 } 
   
 class ProducerConsumer { 
-    public static void main(String args[])  
-    { 
-        // creating buffer queue 
+    public static void main(String[] args) {
         Q q = new Q(); 
           
-        // starting consumer thread 
         new Consumer(q); 
-          
-        // starting producer thread 
+
         new Producer(q); 
     } 
 } 

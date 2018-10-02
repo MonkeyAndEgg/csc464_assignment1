@@ -2,13 +2,17 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/pkg/profile"
 )
 
 var done = make(chan bool)
 var msgs = make(chan int)
 
+const bufferSize = 100
+
 func produce() {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < bufferSize; i++ {
 		fmt.Println("Produced: ", i)
 		msgs <- i
 	}
@@ -23,6 +27,7 @@ func consume() {
 }
 
 func main() {
+	defer profile.Start().Stop()
 	go consume()
 	go produce()
 	<-done
