@@ -113,11 +113,5 @@ class ReaderWriter {
             new Reader(db);
             new Writer(db);
         }
-
-        try {
-        Thread.sleep(20000);
-        } catch(InterruptedException e) {
-            System.out.println("InterruptedException caught");
-        }
     }
 }

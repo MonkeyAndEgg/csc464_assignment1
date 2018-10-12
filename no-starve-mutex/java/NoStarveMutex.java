@@ -81,10 +81,5 @@ public class NoStarveMutex {
         for (int i = 0; i < 1000; i++) {
             new ClientThread(waitRooms, i);
         }
-        try {
-            Thread.sleep(20000);
-        } catch(InterruptedException e) {
-            System.out.println("InterruptedException caught");
-        }
     }
 }
