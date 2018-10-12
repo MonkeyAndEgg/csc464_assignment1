@@ -8,13 +8,14 @@ class WaitRooms {
     static Semaphore t1 = new Semaphore(1);
     static Semaphore t2 = new Semaphore(0);
 
-    void runThoughWaitingRooms(String threadId) {
+    void runThoughWaitingRooms(int threadId) {
         try {
             mutex.acquire();
         } catch(InterruptedException e) { 
             System.out.println("InterruptedException caught"); 
         } 
         room1 ++;
+        System.out.println("Thread#" + threadId + " is in room1.");
         mutex.release();
 
         try {
@@ -31,6 +32,7 @@ class WaitRooms {
         room1 --;
 
         if (room1 == 0) {
+            System.out.println("Room1 is empty now.");
             mutex.release();
             t2.release();
         } else {
@@ -45,9 +47,10 @@ class WaitRooms {
         } 
         room2 --;
 
-        System.out.println("This is " + threadId);
+        System.out.println("Thread#" + threadId + " is in room2.");
 
         if (room2 == 0) {
+            System.out.println("Room2 is empty now.");
             t1.release();
         } else {
             t2.release();
@@ -57,9 +60,9 @@ class WaitRooms {
 
 class ClientThread implements Runnable{
     WaitRooms waitRooms;
-    String threadId;
+    int threadId;
     
-    ClientThread(WaitRooms waitRooms, String threadId) {
+    ClientThread(WaitRooms waitRooms, int threadId) {
         this.waitRooms = waitRooms;
         this.threadId = threadId;
 
@@ -75,7 +78,13 @@ public class NoStarveMutex {
     public static void main(String[] args) {
         WaitRooms waitRooms = new WaitRooms();
 
-        new ClientThread(waitRooms, "thread1");
-        new ClientThread(waitRooms, "thread2");
+        for (int i = 0; i < 1000; i++) {
+            new ClientThread(waitRooms, i);
+        }
+        try {
+            Thread.sleep(20000);
+        } catch(InterruptedException e) {
+            System.out.println("InterruptedException caught");
+        }
     }
 }

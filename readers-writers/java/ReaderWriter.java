@@ -8,30 +8,26 @@ class DataBase {
     static Semaphore noReaders = new Semaphore(1);
     static Semaphore noWriters = new Semaphore(1);
 
-    void write() {
+    void write () throws InterruptedException {
         writeSwitch.lock(noReaders);
-        try {
-            noWriters.acquire();
-        } catch(InterruptedException e) { 
-            System.out.println("InterruptedException caught"); 
-        } 
+        noWriters.acquire();
         
-        data = data + 5;
+        data = data + 2;
+        System.out.println("The writer is writing...");
+        Thread.sleep(100);
         System.out.println("The writer wrote the data: " + data);
 
         noWriters.release();
         writeSwitch.unlock(noReaders);
     }
 
-    void read() {
-        try {
-            noReaders.acquire();
-        } catch(InterruptedException e) { 
-            System.out.println("InterruptedException caught"); 
-        }
+    void read() throws InterruptedException {
+        noReaders.acquire();
         readSwitch.lock(noWriters);
         noReaders.release();
         
+        System.out.println("The reader is reading...");
+        Thread.sleep(100);
         System.out.println("The reader got the data: " + data);
 
         readSwitch.unlock(noWriters);
@@ -78,13 +74,16 @@ class Writer implements Runnable {
     
     Writer(DataBase db) {
         this.db = db;
-        new Thread(this, "Writer").start();
+        Thread t = new Thread(this, "Writer");
+        t.start();
     }
 
     public void run() {
-        for (int i = 0; i < 5; i++) {
+        try {
             db.write();
-        } 
+        } catch(InterruptedException e) {
+            System.out.println("InterruptedException caught");
+        }
     }
 }
 
@@ -93,22 +92,32 @@ class Reader implements Runnable {
 
     Reader(DataBase db) {
         this.db = db;
-        new Thread(this, "Reader").start();
+        Thread t = new Thread(this, "Reader");
+        t.start();
     }
 
     public void run() {
-        for (int i = 0; i < 5; i++) {
+        try {
             db.read();
-        }
+        } catch(InterruptedException e) { 
+            System.out.println("InterruptedException caught"); 
+        } 
     }
 }
 
 class ReaderWriter {
     public static void main(String args[]) {
         DataBase db = new DataBase();
+        
+        for (int i = 0; i < 50; i ++) {
+            new Reader(db);
+            new Writer(db);
+        }
 
-        new Reader(db);
-
-        new Writer(db);
+        try {
+        Thread.sleep(20000);
+        } catch(InterruptedException e) {
+            System.out.println("InterruptedException caught");
+        }
     }
 }

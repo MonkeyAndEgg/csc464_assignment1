@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/books-borrowing/books-borrowing.iml" filepath="$PROJECT_DIR$/books-borrowing/books-borrowing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/no-starve-mutex/no-starve-mutex.iml" filepath="$PROJECT_DIR$/no-starve-mutex/no-starve-mutex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/producer-consumer/producer-consumer.iml" filepath="$PROJECT_DIR$/producer-consumer/producer-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/readers-writers/readers-writers.iml" filepath="$PROJECT_DIR$/readers-writers/readers-writers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smokers/smokers.iml" filepath="$PROJECT_DIR$/smokers/smokers.iml" />
+    </modules>
+  </component>
+</project>

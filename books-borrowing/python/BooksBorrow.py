@@ -1,9 +1,10 @@
 import threading
 import time
 import random
+import psutil
 
 NUM_OF_BOOKS = 8
-NUM_OF_STUDENTS = 4
+NUM_OF_STUDENTS = 50
 
 class Book:
     id = -1
@@ -31,13 +32,12 @@ class Student(threading.Thread):
         self.books = books
 
     def run(self):
-        while 1:
+        bookId = random.randint(0, NUM_OF_BOOKS - 1)
+        while bookId == self.previousBook:
             bookId = random.randint(0, NUM_OF_BOOKS - 1)
-            while bookId == self.previousBook:
-                bookId = random.randint(0, NUM_OF_BOOKS - 1)
-            
-            self.books[bookId].read(self.id)
-            self.previousBook = bookId
+        
+        self.books[bookId].read(self.id)
+        self.previousBook = bookId
 
 def main():
     books = [Book(-1)] * NUM_OF_BOOKS
@@ -51,10 +51,10 @@ def main():
         students[i] = Student(i , books)
         students[i].start()
 
-  
+    for i in range(students.__len__()):
+        students[i].join()
 
-
-
+    print "CPU: ", psutil.cpu_percent()
 
 
 main()

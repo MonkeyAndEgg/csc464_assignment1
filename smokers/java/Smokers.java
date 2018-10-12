@@ -264,11 +264,11 @@ class Pushers {
 
     void makeCigarettes(String holderId) throws InterruptedException {
         System.out.println(holderId + " is making cigarettes.");
-        Thread.sleep(new Random().nextInt(1001));
+        Thread.sleep(200);
     }
 
     void smoke(String holderId) throws InterruptedException {
         System.out.println(holderId + " is smoking.");
-        Thread.sleep(new Random().nextInt(1001));
+        Thread.sleep(200);
     }
 }

@@ -1,5 +1,6 @@
 import threading
 import time
+import psutil
 
 class ReaderWriter():
 	def __init__(self):
@@ -70,16 +71,16 @@ class DataBase:
 	
 	def write(self):
 		self.readerWriter.writer_acquire()
-		self.data += 1
+		self.data += 2
 		print "The writer wrote: ", self.data
-		time.sleep(0.4)
+		time.sleep(0.1)
 		print "Writer done process."
 		self.readerWriter.writer_release()
 
 	def read(self):
 		self.readerWriter.reader_acquire()
 		print "The reader read: ", self.data
-		time.sleep(0.2)
+		time.sleep(0.1)
 		print "Reader done process."
 		self.readerWriter.reader_release()
 
@@ -88,12 +89,22 @@ class Main():
         self.db = DataBase(ReaderWriter())
 
     def main(self):
-		Reader(self.db).start()
-		Writer(self.db).start()
-		Reader(self.db).start()
-		Writer(self.db).start()
-		Writer(self.db).start()
-		Writer(self.db).start()
+		t1 = Writer(self.db)
+		t2 = Writer(self.db)
+		t1.start()
+		t2.start()
+
+		for x in range(5):
+			t1 = Writer(self.db)
+			t2 = Reader(self.db)
+
+			t1.start()
+			t2.start()
+		
+		t1.join()
+		t2.join()
+
+		print "CPU: ", psutil.cpu_percent()
 		
 
 if __name__ == '__main__':

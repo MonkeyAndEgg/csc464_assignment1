@@ -1,4 +1,7 @@
 import threading
+import psutil
+import random
+import time
 
 class Forks:
     forks = [threading.Semaphore(1) for i in range(5)]
@@ -20,17 +23,30 @@ class Forks:
         self.forks[self.left(i)].release()
         self.footman.release()
 
-def attendFeast(forksInit, i):
+def attendFeast(forksInit, i, personId):
     forksInit.get_forks(i)
 
-    print "I am eating."
+    print "Philosopher#%d is eating." % personId
+
+    time.sleep(0.1)
+
+    print "Philosopher#%d is done eating." % personId
 
     forksInit.put_forks(i)
 
 def dinnerTime():
     forks = Forks()
-    
-    t1 = threading.Thread(target=attendFeast, args=[forks, 1])
-    t1.start()
 
+    num_people = 100
+
+    people = [None] * num_people
+    
+    for i in range(0, num_people):
+        people[i] = threading.Thread(target=attendFeast, args=[forks, random.randint(0, 4), i])
+        people[i].start()
+   
+    for i in range(0, num_people):
+        people[i].join()
+
+    print "CPU: ", psutil.cpu_percent()
 dinnerTime()

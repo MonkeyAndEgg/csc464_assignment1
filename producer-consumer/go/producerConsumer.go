@@ -2,17 +2,19 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/pkg/profile"
+	psutil "github.com/shirou/gopsutil/cpu"
 )
 
 var done = make(chan bool)
 var msgs = make(chan int)
 
-const bufferSize = 100
+const bufferSize = 3
 
 func produce() {
-	for i := 0; i < bufferSize; i++ {
+	for i := 0; i < 500; i++ {
 		fmt.Println("Produced: ", i)
 		msgs <- i
 	}
@@ -27,8 +29,17 @@ func consume() {
 }
 
 func main() {
-	defer profile.Start().Stop()
+	defer profile.Start(profile.MemProfile).Stop()
+	go produce()
 	go consume()
 	go produce()
+	go consume()
+
 	<-done
+	percentage, err := psutil.Percent(time.Duration(5)*time.Millisecond, false)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("CPU Percent: ", percentage)
 }

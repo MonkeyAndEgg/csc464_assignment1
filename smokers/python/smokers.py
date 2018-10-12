@@ -1,6 +1,7 @@
 import threading
 import random
 import time
+import psutil
 
 class Pushers():
     mutex = threading.Semaphore(1)
@@ -31,6 +32,7 @@ class Pushers():
             else:
                 self.tobacco.release()
                 self.match.release()
+            print "CPU: ", psutil.cpu_percent()
 
     def PusherA(self):
         while 1:
@@ -97,11 +99,11 @@ class Pushers():
         
     def makeCigarettes(self, holderId):
         print holderId, " is makinhg cigarettes."
-        time.sleep(random.random())
+        time.sleep(0.1)
         
     def smoke(self, holderId):
         print holderId, " is smoking."
-        time.sleep(random.random())
+        time.sleep(0.1)
 
 def main():
     pushers = Pushers()

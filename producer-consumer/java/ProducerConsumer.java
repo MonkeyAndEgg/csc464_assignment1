@@ -43,15 +43,18 @@ class Q {
 } 
   
 class Producer implements Runnable { 
-    Q q; 
-    Producer(Q q) { 
+    Q q;
+    int data; 
+    Producer(Q q, int data) { 
         this.q = q; 
+        this.data = data;
         new Thread(this, "Producer").start(); 
     } 
       
-    public void run() { 
-        // for (int i=0; i < 5; i++)   
-        //     q.put(i); 
+    public void run() {
+        for (int i = 0; i < 500; i++) {
+            q.put(this.data * i);
+        }
     } 
 } 
   
@@ -62,18 +65,21 @@ class Consumer implements Runnable {
         new Thread(this, "Consumer").start(); 
     } 
       
-    public void run() { 
-        for (int i=0; i < 1; i++)  
-            q.get(); 
+    public void run() {
+        for (int i = 0; i < 500; i++) {
+            q.get();
+        }
     } 
 } 
   
 class ProducerConsumer { 
     public static void main(String[] args) {
         Q q = new Q(); 
-          
-        new Consumer(q); 
 
-        new Producer(q); 
+        new Consumer(q);
+        new Producer(q, 1);
+
+        new Consumer(q);
+        new Producer(q, 2);
     } 
 } 

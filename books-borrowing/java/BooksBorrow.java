@@ -3,7 +3,7 @@ import java.util.concurrent.Semaphore;
 
 final class Constants {
     public static final int NUM_OF_BOOKS = 8;
-    public static final int NUM_OF_STUDENTS = 4;
+    public static final int NUM_OF_STUDENTS = 8;
 }
 
 
@@ -40,19 +40,17 @@ class Student implements Runnable {
     public void run() {
         Random rand = new Random();
 
-        while (true) {
-            int bookId = rand.nextInt(Constants.NUM_OF_BOOKS);
-            while (bookId == previousBook) {
-                bookId = rand.nextInt(Constants.NUM_OF_BOOKS);
-            }
-
-            try {
-                books[bookId].read(this);
-            } catch(InterruptedException e) { 
-                System.out.println("InterruptedException caught"); 
-            }
-            previousBook = bookId;
+        int bookId = rand.nextInt(Constants.NUM_OF_BOOKS);
+        while (bookId == previousBook) {
+            bookId = rand.nextInt(Constants.NUM_OF_BOOKS);
         }
+
+        try {
+            books[bookId].read(this);
+        } catch(InterruptedException e) { 
+            System.out.println("InterruptedException caught"); 
+        }
+        previousBook = bookId;
     }
 }
 
@@ -67,6 +65,12 @@ public class BooksBorrow {
 
         for (int i = 0; i < Constants.NUM_OF_STUDENTS; i++) {
             student[i] = new Student(i, books);
+        }
+
+        try{
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            System.out.println("InterruptedException caught");
         }
 
     }
