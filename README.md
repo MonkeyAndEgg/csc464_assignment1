@@ -1,8 +1,8 @@
 # csc464_assignment1
 
-This is the repo for course csc464 assignment 1
+This is the repo for course csc464 assignment 1, and here are some hints:
 
-Hint:
+
 To run the Java code, simply run javac xxx.java
 
 To run the Go code, either type go run xxx.go or go build xxx.go then ./xxx(the file name without extension)
